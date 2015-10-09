@@ -93,27 +93,27 @@ RUN julia -e 'Pkg.add("IJulia")'
 RUN julia -e 'Pkg.add("Gadfly")' && julia -e 'Pkg.add("RDatasets")'
 
 # IHaskell + IHaskell-Widgets + Dependencies for examples
-RUN cabal update && \
-    CURL_CA_BUNDLE='/etc/ssl/certs/ca-certificates.crt' curl 'https://www.stackage.org/lts-2.22/cabal.config?global=true' >> ~/.cabal/config && \
-    cabal install cpphs && \
-    cabal install gtk2hs-buildtools && \
-    cabal install ihaskell-0.8.0.0 --reorder-goals && \
-    cabal install ihaskell-widgets-0.2.0.0 HTTP Chart Chart-cairo && \
-    ihaskell install && \
-    rm -fr $(echo ~/.cabal/bin/* | grep -iv ihaskell) ~/.cabal/packages ~/.cabal/share/doc ~/.cabal/setup-exe-cache ~/.cabal/logs
+#RUN cabal update && \
+#    CURL_CA_BUNDLE='/etc/ssl/certs/ca-certificates.crt' curl 'https://www.stackage.org/lts-2.22/cabal.config?global=true' >> ~/.cabal/config && \
+#    cabal install cpphs && \
+#    cabal install gtk2hs-buildtools && \
+#    cabal install ihaskell-0.8.0.0 --reorder-goals && \
+#    cabal install ihaskell-widgets-0.2.0.0 HTTP Chart Chart-cairo && \
+#    ihaskell install && \
+#    rm -fr $(echo ~/.cabal/bin/* | grep -iv ihaskell) ~/.cabal/packages ~/.cabal/share/doc ~/.cabal/setup-exe-cache ~/.cabal/logs
 
 # Extra Kernels
-RUN pip install --user --no-cache-dir bash_kernel && \
-    python -m bash_kernel.install
+#RUN pip install --user --no-cache-dir bash_kernel && \
+#    python -m bash_kernel.install
 
 # Clone featured notebooks before adding local content to avoid recloning
 # everytime something changes locally
 RUN mkdir -p /home/jovyan/work/communities && \
     mkdir -p /home/jovyan/work/featured
 RUN git clone --depth 1 https://github.com/jvns/pandas-cookbook.git /home/jovyan/work/featured/pandas-cookbook/
-RUN git clone --depth 1 https://github.com/gibiansky/IHaskell.git /home/jovyan/work/IHaskell/ && \
-    mv /home/jovyan/work/IHaskell/ihaskell-display/ihaskell-widgets/Examples /home/jovyan/work/featured/ihaskell-widgets && \
-    rm -r /home/jovyan/work/IHaskell
+#RUN git clone --depth 1 https://github.com/gibiansky/IHaskell.git /home/jovyan/work/IHaskell/ && \
+#    mv /home/jovyan/work/IHaskell/ihaskell-display/ihaskell-widgets/Examples /home/jovyan/work/featured/ihaskell-widgets && \
+#    rm -r /home/jovyan/work/IHaskell
 
 # Add local content, starting with notebooks and datasets which are the largest
 # so that later, smaller file changes do not cause a complete recopy during 
