@@ -8,32 +8,32 @@ MAINTAINER Jupyter Project <jupyter@googlegroups.com>
 USER root
 
 # Julia dependencies
-RUN apt-get update &&  \
-    apt-get install -y julia libnettle4 && \
-    apt-get clean
+#RUN apt-get update &&  \
+#    apt-get install -y julia libnettle4 && \
+#    apt-get clean
 
 # R dependencies that conda can't provide (X, fonts, compilers)
-RUN apt-get update && \
-    apt-get install -y libxrender1 fonts-dejavu gfortran gcc && \
-    apt-get clean
+#RUN apt-get update && \
+#    apt-get install -y libxrender1 fonts-dejavu gfortran gcc && \
+#    apt-get clean
 
 # The Glorious Glasgow Haskell Compiler
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends software-properties-common && \
-    add-apt-repository -y ppa:hvr/ghc && \
-    sed -i s/jessie/trusty/g /etc/apt/sources.list.d/hvr-ghc-jessie.list && \
-    apt-get update && \
-    apt-get install -y cabal-install-1.22 ghc-7.8.4 happy-1.19.4 alex-3.1.3 && \
-    apt-get clean
+#RUN apt-get update && \
+#    apt-get install -y --no-install-recommends software-properties-common && \
+#    add-apt-repository -y ppa:hvr/ghc && \
+#    sed -i s/jessie/trusty/g /etc/apt/sources.list.d/hvr-ghc-jessie.list && \
+#    apt-get update && \
+#    apt-get install -y cabal-install-1.22 ghc-7.8.4 happy-1.19.4 alex-3.1.3 && \
+#    apt-get clean
 
 # IHaskell dependencies
-RUN apt-get install -y --no-install-recommends zlib1g-dev libzmq3-dev libtinfo-dev libcairo2-dev libpango1.0-dev && apt-get clean
+#RUN apt-get install -y --no-install-recommends zlib1g-dev libzmq3-dev libtinfo-dev libcairo2-dev libpango1.0-dev && apt-get clean
 
 # Ruby dependencies
-RUN apt-get install -y --no-install-recommends ruby ruby-dev libtool autoconf automake gnuplot-nox libsqlite3-dev libatlas-base-dev libgsl0-dev libmagick++-dev imagemagick && \
-    ln -s /usr/bin/libtoolize /usr/bin/libtool && \
-    apt-get clean
-RUN gem install --no-rdoc --no-ri sciruby-full
+#RUN apt-get install -y --no-install-recommends ruby ruby-dev libtool autoconf automake gnuplot-nox libsqlite3-dev libatlas-base-dev libgsl0-dev libmagick++-dev imagemagick && \
+#    ln -s /usr/bin/libtoolize /usr/bin/libtool && \
+#    apt-get clean
+#RUN gem install --no-rdoc --no-ri sciruby-full
 
 # Spark dependencies
 ENV APACHE_SPARK_VERSION 1.4.1
@@ -82,15 +82,15 @@ RUN $CONDA_DIR/envs/python2/bin/python \
     kernelspec install-self --user
 
 # IRuby
-RUN iruby register
+#RUN iruby register
 
 # R packages
-RUN conda config --add channels r
-RUN conda install --yes r-irkernel r-plyr r-devtools r-rcurl r-dplyr r-ggplot2 r-caret rpy2 r-tidyr r-shiny r-rmarkdown r-forecast r-stringr r-rsqlite r-reshape2 r-nycflights13 r-randomforest && conda clean -yt
+#RUN conda config --add channels r
+#RUN conda install --yes r-irkernel r-plyr r-devtools r-rcurl r-dplyr r-ggplot2 r-caret rpy2 r-tidyr r-shiny r-rmarkdown r-forecast r-stringr r-rsqlite r-reshape2 r-nycflights13 r-randomforest && conda clean -yt
 
 # IJulia and Julia packages
-RUN julia -e 'Pkg.add("IJulia")'
-RUN julia -e 'Pkg.add("Gadfly")' && julia -e 'Pkg.add("RDatasets")'
+#RUN julia -e 'Pkg.add("IJulia")'
+#RUN julia -e 'Pkg.add("Gadfly")' && julia -e 'Pkg.add("RDatasets")'
 
 # IHaskell + IHaskell-Widgets + Dependencies for examples
 #RUN cabal update && \
@@ -125,6 +125,8 @@ COPY datasets/ /home/jovyan/work/datasets/
 RUN mkdir -p /opt/conda/share/jupyter/kernels/scala
 COPY resources/kernel.json /opt/conda/share/jupyter/kernels/scala/
 
+RUN pip install --user --no-cache-dir cloudant
+
 # Switch back to root for permission fixes, conversions, and trust. Make sure
 # trust is done as jovyan so that the signing secret winds up in the jovyan
 # profile, not root's
@@ -151,3 +153,4 @@ RUN chmod a+rX /srv/templates
 COPY resources/jupyter_notebook_config.partial.py /tmp/
 RUN cat /tmp/jupyter_notebook_config.partial.py >> /home/jovyan/.jupyter/jupyter_notebook_config.py && \
     rm /tmp/jupyter_notebook_config.partial.py
+    
